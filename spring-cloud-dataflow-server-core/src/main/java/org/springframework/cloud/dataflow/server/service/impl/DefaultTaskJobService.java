@@ -132,6 +132,24 @@ public class DefaultTaskJobService implements TaskJobService {
 	}
 
 	@Override
+	public List<TaskJobExecution> listJobExecutionsForJobWithStepCountFilteredByJobInstanceId(
+			Pageable pageable, int jobInstanceId) throws NoSuchJobException {
+		Assert.notNull(pageable, "pageable must not be null");
+		return getTaskJobExecutionsWithStepCountForList(
+				jobService.listJobExecutionsForJobWithStepCountFilteredByJobInstanceId(jobInstanceId, getPageOffset(pageable),
+						pageable.getPageSize()));
+	}
+
+	@Override
+	public List<TaskJobExecution> listJobExecutionsForJobWithStepCountFilteredByTaskExecutionId(
+			Pageable pageable, int taskExecutionId) throws NoSuchJobException {
+		Assert.notNull(pageable, "pageable must not be null");
+		return getTaskJobExecutionsWithStepCountForList(
+				jobService.listJobExecutionsForJobWithStepCountFilteredByTaskExecutionId(taskExecutionId, getPageOffset(pageable),
+						pageable.getPageSize()));
+	}
+
+	@Override
 	public List<TaskJobExecution> listJobExecutionsForJobWithStepCount(Pageable pageable, String jobName) throws NoSuchJobException {
 		Assert.notNull(pageable, "pageable must not be null");
 		return getTaskJobExecutionsWithStepCountForList(

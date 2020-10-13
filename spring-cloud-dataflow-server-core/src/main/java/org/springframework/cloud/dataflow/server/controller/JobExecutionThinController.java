@@ -136,7 +136,45 @@ public class JobExecutionThinController {
 		return assembler.toModel(page, jobAssembler);
 	}
 
+	/**
+	 * Retrieve all task job executions filtered with the job instance id specified
+	 *
+	 * @param jobInstanceId the job instance id associated with the execution.
+	 * @param pageable page-able collection of {@code TaskJobExecution}s.
+	 * @param assembler for the {@link TaskJobExecution}s
+	 * @return list task/job executions with the specified jobName.
+	 * @throws NoSuchJobException if the job with the given name does not exist.
+	 */
+	@RequestMapping(value = "", method = RequestMethod.GET, params = "jobInstanceId", produces = "application/json")
+	@ResponseStatus(HttpStatus.OK)
+	public PagedModel<JobExecutionThinResource> retrieveJobsByJobInstanceId(
+			@RequestParam("jobInstanceId") int jobInstanceId, Pageable pageable,
+			PagedResourcesAssembler<TaskJobExecution> assembler) throws NoSuchJobException {
+		List<TaskJobExecution> jobExecutions = taskJobService
+				.listJobExecutionsForJobWithStepCountFilteredByJobInstanceId(pageable, jobInstanceId);
+		Page<TaskJobExecution> page = new PageImpl<>(jobExecutions, pageable, jobExecutions.size());
+		return assembler.toModel(page, jobAssembler);
+	}
 
+	/**
+	 * Retrieve all task job executions filtered with the task execution id specified
+	 *
+	 * @param taskExecutionId the task execution id associated with the execution.
+	 * @param pageable page-able collection of {@code TaskJobExecution}s.
+	 * @param assembler for the {@link TaskJobExecution}s
+	 * @return list task/job executions with the specified jobName.
+	 * @throws NoSuchJobException if the job with the given name does not exist.
+	 */
+	@RequestMapping(value = "", method = RequestMethod.GET, params = "taskExecutionId", produces = "application/json")
+	@ResponseStatus(HttpStatus.OK)
+	public PagedModel<JobExecutionThinResource> retrieveJobsByTaskExecutionId(
+			@RequestParam("taskExecutionId") int taskExecutionId, Pageable pageable,
+			PagedResourcesAssembler<TaskJobExecution> assembler) throws NoSuchJobException {
+		List<TaskJobExecution> jobExecutions = taskJobService
+				.listJobExecutionsForJobWithStepCountFilteredByTaskExecutionId(pageable, taskExecutionId);
+		Page<TaskJobExecution> page = new PageImpl<>(jobExecutions, pageable, jobExecutions.size());
+		return assembler.toModel(page, jobAssembler);
+	}
 
 	/**
 	 * {@link org.springframework.hateoas.server.ResourceAssembler} implementation that converts
