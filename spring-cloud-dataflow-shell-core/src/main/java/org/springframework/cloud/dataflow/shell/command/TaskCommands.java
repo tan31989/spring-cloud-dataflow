@@ -366,8 +366,10 @@ public class TaskCommands implements CommandMarker {
 
 	@CliCommand(value = TASK_EXECUTION_CLEANUP, help = "Clean up any platform specific resources linked to a task "
 			+ "execution")
-	public String cleanup(@CliOption(key = { "", "id" }, help = "the task execution id", mandatory = true) long id) {
-		taskOperations().cleanup(id);
+	public String cleanup(@CliOption(key = { "", "id" }, help = "the task execution id", mandatory = true) long id,
+			@CliOption(key = {"remove-data"}, help = "the flag to be set to delete the task execution entry.",
+					unspecifiedDefaultValue = "false", specifiedDefaultValue = "true") boolean removeData) {
+		taskOperations().cleanup(id, removeData);
 		return String.format("Request to clean up resources for task execution %s has been submitted", id);
 	}
 
